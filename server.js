@@ -1,25 +1,27 @@
 const wppconnect = require('@wppconnect-team/wppconnect');
+const axios = require('axios');
 
-wppconnect
-  .create({
-    session: 'carol-session',
-    catchQR: (base64Qr, asciiQR, attempts, urlCode) => {
-      console.log('QR RECEBIDO', asciiQR);
-    },
-    statusFind: (statusSession, session) => {
-      console.log('Status da sessão:', statusSession);
-    },
-    headless: true,
-    devtools: false,
-    useChrome: false
-  })
-  .then((client) => start(client))
-  .catch((error) => console.log(error));
+wppconnect.create({
+  session: 'carol-session',
+  catchQR: (base64Qr, asciiQR) => {
+    console.log('QR RECEBIDO:', asciiQR);
+  },
+  headless: true,
+}).then((client) => {
+  client.onMessage(async (message) => {
+    if (message.isGroupMsg && !message.fromMe) {
+      console.log('📥 Mensagem recebida:', message.body);
 
-function start(client) {
-  client.onMessage((message) => {
-    if (message.body === 'ping') {
-      client.sendText(message.from, 'pong');
+      // Envia pro webhook do n8n
+      try {
+        await axios.post('https://SEU_DOMINIO_N8N.webhook/editar-mensagem', {
+          text: message.body,
+          from: message.from,
+          name: message.sender?.pushname || '',
+        });
+      } catch (err) {
+        console.error('❌ Erro ao enviar pro n8n:', err.message);
+      }
     }
   });
-}
+});
