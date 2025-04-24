@@ -1,1 +1,1 @@
-web: node server.js --frontend --port 8080
+web: node index.js --frontend --port 8080
