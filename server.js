@@ -1,13 +1,25 @@
-const express = require('express');
-const app = express();
+const wppconnect = require('@wppconnect-team/wppconnect');
 
-app.get('/', (req, res) => {
-  res.send(`
-    <h1>✅ WPPConnect Server está rodando!</h1>
-    <p>Mas a interface com QR Code ainda não foi ativada.</p>
-  `);
-});
+wppconnect
+  .create({
+    session: 'carol-session',
+    catchQR: (base64Qr, asciiQR, attempts, urlCode) => {
+      console.log('QR RECEBIDO', asciiQR);
+    },
+    statusFind: (statusSession, session) => {
+      console.log('Status da sessão:', statusSession);
+    },
+    headless: true,
+    devtools: false,
+    useChrome: false
+  })
+  .then((client) => start(client))
+  .catch((error) => console.log(error));
 
-app.listen(8080, () => {
-  console.log('Server is running on port 8080');
-});
+function start(client) {
+  client.onMessage((message) => {
+    if (message.body === 'ping') {
+      client.sendText(message.from, 'pong');
+    }
+  });
+}
