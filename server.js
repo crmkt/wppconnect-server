@@ -6,7 +6,13 @@ wppconnect.create({
   catchQR: (base64Qr, asciiQR) => {
     console.log('QR RECEBIDO:', asciiQR);
   },
-  headless: true,
+  headless: false,          
+  useChrome: true,           
+  devtools: false,
+  browserArgs: [''],
+  puppeteerOptions: {},
+  disableWelcome: true,
+  updatesLog: true
 }).then((client) => {
   client.onMessage(async (message) => {
     if (message.isGroupMsg && !message.fromMe) {
