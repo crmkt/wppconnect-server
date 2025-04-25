@@ -20,7 +20,8 @@ wppconnect.create({
 
       // Envia pro webhook do n8n
       try {
-        await axios.post('https://seu-dominio.railway.app/webhook/editar-mensagem', {
+        await axios.post('https://n8n-production-9d818.up.railway.app/webhook/editar-mensagem
+', {
           text: message.body,
           from: message.from,
           name: message.sender?.pushname || '',
