@@ -5,7 +5,10 @@ wppconnect
   .create({
     session: 'carol-session',
     catchQR: (base64Qr, asciiQR, attempts, urlCode) => {
-      console.log('QR RECEBIDO:', asciiQR);
+      // Mostra o QR no terminal (ascii) e como link de imagem
+      console.log('\n🧾 QR RECEBIDO (modo texto):\n', asciiQR);
+      const qrImageUrl = `https://api.qrserver.com/v1/create-qr-code/?data=${urlCode}&size=300x300`;
+      console.log('\n📱 ESCANEIE O QR CODE NESSE LINK:\n', qrImageUrl);
     },
     headless: true,
     useChrome: false,
