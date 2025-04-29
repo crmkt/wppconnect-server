@@ -20,7 +20,7 @@ wppconnect
         console.log('📥 Mensagem recebida:', message.body);
 
         try {
-          const response = await axios.post('https://n8n-production-9d818.up.railway.app/webhook/teste-mensagem', {
+          const response = await axios.post('https://n8n-production-9d818.up.railway.app/webhook/editar-mensagem', {
             text: message.body,
             from: message.from,
             name: message.sender?.pushname || '',
